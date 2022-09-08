@@ -1,14 +1,10 @@
-# foreman-apps
-
-## Status ##
-
-[![Build Status](https://travis-ci.com/foremanmining/foreman-apps.svg?branch=master)](https://travis-ci.com/foremanmining/foreman-apps)
+# foreman-apps-sanitized
 
 ## Applications ##
 
-This repository currently contains the following applications:
+The following repository contains a point-in-time, limited use version of the Foreman Pickaxe agent that's capable of reading stats and performing common operations against Antminer and Whatsminer ASICs.
 
-- Pickaxe
+If you're considering using this application, you're probably in the wrong place!
 
 ### Pickaxe ###
 
