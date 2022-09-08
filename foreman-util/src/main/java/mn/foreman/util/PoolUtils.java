@@ -1,0 +1,71 @@
+package mn.foreman.util;
+
+import com.google.common.base.CharMatcher;
+
+/** Pool utilities. */
+public class PoolUtils {
+
+    /**
+     * Constructor.
+     *
+     * Note: intentionally hidden.
+     */
+    private PoolUtils() {
+        // Do nothing
+    }
+
+    /**
+     * Sanitizes a URL by extracting the host and post.
+     *
+     * @param url The URL.
+     *
+     * @return The pool.
+     */
+    public static String sanitizeUrl(final String url) {
+        String sanitized = "";
+        if ((url != null) && !url.isEmpty()) {
+            sanitized = url;
+
+            // Trim padding
+            sanitized = sanitized.trim();
+
+            // Remove anything in the front
+            if (sanitized.contains(" ")) {
+                sanitized = sanitized.split(" ")[1];
+            }
+
+            // Trim the protocol
+            if (sanitized.contains("://")) {
+                final String[] parts = sanitized.split("://");
+                if (parts.length > 1) {
+                    sanitized = parts[1];
+                } else {
+                    sanitized = parts[0];
+                }
+            }
+
+            // Trim user
+            if (sanitized.contains("@")) {
+                sanitized = sanitized.split("@")[1];
+            }
+
+            // Lowercase
+            sanitized = sanitized.toLowerCase();
+
+            // Remove slashes
+            sanitized = sanitized.replace("/", "");
+
+            // Remove >
+            sanitized = sanitized.replace(">", "");
+
+            // Trim padding
+            sanitized = sanitized.trim();
+
+            // Must be well-formed
+            if (!CharMatcher.ascii().matchesAllOf(sanitized)) {
+                sanitized = "";
+            }
+        }
+        return sanitized;
+    }
+}

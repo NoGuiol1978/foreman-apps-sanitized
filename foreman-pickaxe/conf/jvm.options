@@ -1,0 +1,9 @@
+# Memory Configuration
+
+## Xms represents the initial size of total heap space
+## Xmx represents the maximum size of total heap space
+-Xms128m
+-Xmx1536m
+
+## Additional start
+## Additional end

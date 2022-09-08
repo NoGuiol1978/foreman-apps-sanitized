@@ -1,0 +1,42 @@
+language: java
+jdk:
+  - openjdk8
+
+before_install: openssl aes-256-cbc -K $encrypted_a48e15357eff_key -iv $encrypted_a48e15357eff_iv -in foreman-production-dff7d0598319.json.enc -out foreman-production-dff7d0598319.json -d
+
+install: mvn install --settings .travis.settings.xml -DskipTests=true -Dassembly.skipAssembly=true -Dmaven.javadoc.skip=true -B -V -q
+
+script: mvn verify --settings .travis.settings.xml -q
+
+before_deploy:
+  - rm -rf build
+  - mkdir build
+  - cp -ra foreman-pickaxe/target/*.tar.bz2 build/.
+  - cp -ra foreman-pickaxe/target/*.tar.gz build/.
+  - cp -ra foreman-pickaxe/target/*.zip build/.
+
+deploy:
+  - provider: script
+    script: mvn deploy --settings .travis.settings.xml -DskipTests=true -q
+    skip_cleanup: true
+    on:
+      tags: true
+  - provider: gcs
+    access_key_id: $GCS_ACCESS_KEY_ID
+    secret_access_key: $GCS_SECRET_ACCESS_KEY
+    bucket: "pickaxe-releases"
+    local_dir: "build"
+    skip_cleanup: true
+    on:
+      tags: true
+  - provider: releases
+    api_key: $GITHUB_TOKEN
+    file:
+      - "foreman-pickaxe/target/*.tar.bz2"
+      - "foreman-pickaxe/target/*.tar.gz"
+      - "foreman-pickaxe/target/*.zip"
+    file_glob: true
+    skip_cleanup: true
+    on:
+      tags: true
+    name: $TRAVIS_BRANCH

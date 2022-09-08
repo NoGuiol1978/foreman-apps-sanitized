@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration monitorInterval="30">
+    <Appenders>
+        <RollingFile name="RollingFile">
+            <FileName>${sys:LOG_LOCATION}/pickaxe.log</FileName>
+            <FilePattern>${sys:LOG_LOCATION}/pickaxe-%d{yyyy-MM-dd}.log</FilePattern>
+            <PatternLayout>
+                <Pattern>[%thread] %d{HH:mm:ss.SSS} [%level] %logger - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+            <DefaultRolloverStrategy max="7"/>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="warn">
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>

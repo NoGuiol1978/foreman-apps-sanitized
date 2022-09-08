@@ -1,0 +1,184 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>mn.foreman</groupId>
+        <artifactId>foreman-buildmaster</artifactId>
+        <version>3.155.0</version>
+    </parent>
+
+    <artifactId>foreman-pickaxe</artifactId>
+    <version>3.155.0</version>
+    <name>foreman: foreman-pickaxe</name>
+
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>mn.foreman</groupId>
+            <artifactId>foreman-antminer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mn.foreman</groupId>
+            <artifactId>foreman-cgminer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mn.foreman</groupId>
+            <artifactId>foreman-discover</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mn.foreman</groupId>
+            <artifactId>foreman-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mn.foreman</groupId>
+            <artifactId>foreman-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mn.foreman</groupId>
+            <artifactId>foreman-whatsminer</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>mn.foreman</groupId>
+            <artifactId>java-api</artifactId>
+        </dependency>
+
+        <!-- Apache -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+
+        <!-- SNMP -->
+        <dependency>
+            <groupId>org.snmp4j</groupId>
+            <artifactId>snmp4j</artifactId>
+        </dependency>
+
+        <!-- Utils -->
+        <dependency>
+            <groupId>one.util</groupId>
+            <artifactId>streamex</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.jopt-simple</groupId>
+            <artifactId>jopt-simple</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
+        <!-- JSON -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+        </dependency>
+
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymock</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>
+                                ${project.build.directory}/lib
+                            </outputDirectory>
+                            <includeScope>compile</includeScope>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <excludeTransitive>true</excludeTransitive>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>assembly/assembly-min.xml</descriptor>
+                        <descriptor>assembly/assembly-jre.xml</descriptor>
+                    </descriptors>
+                    <finalName>
+                        ${project.artifactId}-${project.version}
+                    </finalName>
+                    <tarLongFileMode>
+                        gnu
+                    </tarLongFileMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
