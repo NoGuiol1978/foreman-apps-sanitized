@@ -1,6 +1,8 @@
 #!/bin/bash
 
 PICKAXE_HOME=$(cd `dirname $0`/..; pwd)
+PICKAXE_CONF="$PICKAXE_HOME/conf/pickaxe.yml"
+PICKAXE_PGREP_PATTERN="java.*pickaxe.*$PICKAXE_CONF"
 
 # Configures Java
 setup_java() {
@@ -29,12 +31,12 @@ setup_java() {
     [[ ! -z "${FOREMAN_BASE_URL}" ]] && JVM_PARAMS+=" -DFOREMAN_BASE_URL=${FOREMAN_BASE_URL}"
 
     # JVM command line arguments
-    JVM_COMMAND_LINE="-c $PICKAXE_HOME/conf/pickaxe.yml"
+    JVM_COMMAND_LINE="-c $PICKAXE_CONF"
 }
 
 # Application status
 status() {
-    if pgrep -f "java.*pickaxe" > /dev/null
+    if pgrep -f $PICKAXE_PGREP_PATTERN > /dev/null
     then
         echo "Pickaxe is running..."
     else
@@ -44,7 +46,7 @@ status() {
 
 # Starts the application
 start() {
-    if pgrep -f "java.*pickaxe" > /dev/null
+    if pgrep -f $PICKAXE_PGREP_PATTERN > /dev/null
     then
         echo "Pickaxe is already running..."
     else
@@ -60,14 +62,14 @@ start() {
             -cp "$JVM_CLASSPATH" \
             mn.foreman.pickaxe.Main ${JVM_COMMAND_LINE} &
 
-        echo "started(`pgrep -f 'java.*pickaxe'`)"
+        echo "started("$(pgrep -f "$PICKAXE_PGREP_PATTERN")")"
     fi
 }
 
 # Stops the application
 stop() {
     echo "Stopping pickaxe..."
-    pkill -f 'java.*pickaxe.Main'
+    pkill -f "$PICKAXE_PGREP_PATTERN"
 }
 
 if [ ! -z $1 ]; then
